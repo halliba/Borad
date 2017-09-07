@@ -12,7 +12,9 @@ public class ChatInput extends TextField {
         this.setOnAction(e -> {
             // add your code to be run here
             System.out.println(e);
-            chatPanel.addMessage(new ChatMessage("sergej",((ChatInput) e.getTarget()).getText()));
+            ChatInput input = ((ChatInput) e.getTarget());
+            chatPanel.addMessage(new ChatMessage("Sergej",input.getText()));
+            input.setText("");
         });
     }
 
