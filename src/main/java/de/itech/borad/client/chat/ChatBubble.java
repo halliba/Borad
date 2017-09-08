@@ -21,9 +21,12 @@ public class ChatBubble extends VBox {
     private Polygon triangle = new Polygon();
     private Circle circle = new Circle();
 
-    public ChatBubble(ChatMessage message) {
+    boolean isMe;
+
+    public ChatBubble(ChatMessage message, boolean isMe) {
         this.getStyleClass().add("chat-bubble");
         this.message = message;
+        this.isMe = isMe;
 
         initMessageTop();
         initMessageContent();
@@ -33,7 +36,7 @@ public class ChatBubble extends VBox {
         this.getChildren().add(triangle);
         this.getChildren().add(messageContentWrapper);
 
-        if(isMe()){
+        if(isMe){
             setMe();
         }
     }
@@ -81,10 +84,6 @@ public class ChatBubble extends VBox {
 
 
         messageContentWrapper.getChildren().add(this.messageContent);
-    }
-
-    public boolean isMe(){
-        return message.getAuthor() == "Sergej";
     }
 
     public void setMe(){

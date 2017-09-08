@@ -15,6 +15,7 @@ public class HashUtils {
             return null;
         }
         byte[] hash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+
         String encoded = Base64.getEncoder().encodeToString(hash);
         return encoded;
     }

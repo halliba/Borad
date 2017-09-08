@@ -24,7 +24,7 @@ public class ChatPanel extends ScrollPane {
     public synchronized void addMessage(ChatMessage message) {
         if (message == null) throw new NullPointerException("The message to add to the panel can not be null");
 
-        final ChatBubble bubble = new ChatBubble(message);
+        final ChatBubble bubble = new ChatBubble(message, false);
         bubble.prefWidthProperty().bind(this.widthProperty().subtract(11));
 
         this.messages.getChildren().add(bubble);

@@ -5,8 +5,6 @@ import java.util.Enumeration;
 
 public class UdpClient implements Runnable{
 
-    private static final int SEND_PORT = 8888;
-
     private byte[] packet;
 
     private UdpManager manager;
@@ -54,7 +52,7 @@ public class UdpClient implements Runnable{
 
                 // Send the broadcast package!
                 try {
-                    DatagramPacket sendPacket = new DatagramPacket(packet, packet.length, broadcast, SEND_PORT);
+                    DatagramPacket sendPacket = new DatagramPacket(packet, packet.length, broadcast, UdpManager.RECEIVE_PORT);
                     clientSocket.send(sendPacket);
                 } catch (Exception e) {
                     e.printStackTrace();

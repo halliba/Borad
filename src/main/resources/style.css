@@ -5,7 +5,7 @@
 .right {
     -fx-background-color: #f2f5f8;
     -fx-text-fill: white;
-    -fx-background-image: url('/static/itech_bg.png');
+    -fx-background-image: url('/itech_bg.png');
     -fx-background-repeat: repeat;
     -fx-background-size: 250;
     -fx-background-position: left bottom;

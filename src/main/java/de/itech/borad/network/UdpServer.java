@@ -9,8 +9,6 @@ import java.util.Arrays;
 
 public class UdpServer implements Runnable{
 
-    private static final int SERVER_PORT = 34567;
-
     private DatagramSocket serverSocket;
 
     private UdpManager manager;
@@ -20,7 +18,7 @@ public class UdpServer implements Runnable{
     public UdpServer(UdpManager manager){
         this.manager = manager;
         try {
-            serverSocket = new DatagramSocket(SERVER_PORT);
+            serverSocket = new DatagramSocket(UdpManager.RECEIVE_PORT);
         } catch (SocketException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 import de.itech.borad.client.Gui;
 import de.itech.borad.client.chatlist.PublicChatRoom;
+import de.itech.borad.core.MessageController;
 import de.itech.borad.network.UdpManager;
 import de.itech.borad.network.UdpServer;
 import javafx.application.Application;
@@ -10,8 +11,13 @@ public class Main  extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        man.sendMessage("aölsdf{Hi:Hi}");
-        new Gui(primaryStage);
+        MessageController controller = new MessageController();
+        Gui gui = new Gui(primaryStage, controller);
+        controller.setGui(gui);
+        controller.setManager(man);
+        man.setMessageController(controller);
+        man.startListening();
+        man.sendMessage("FLEX{}");
     }
 
     static UdpManager man;
