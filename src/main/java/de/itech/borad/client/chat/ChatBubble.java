@@ -1,6 +1,7 @@
 package de.itech.borad.client.chat;
 
-import de.itech.borad.models.ChatMessage;
+import de.itech.borad.models.BaseMessage;
+import de.itech.borad.models.Message;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -11,7 +12,7 @@ import javafx.scene.shape.Polygon;
 
 public class ChatBubble extends VBox {
 
-    private ChatMessage message;
+    private Message message;
     private final Label authorLabel = new Label();
     private final Label timeLabel = new Label();
     private final Label messageContent = new Label();
@@ -21,12 +22,15 @@ public class ChatBubble extends VBox {
     private Polygon triangle = new Polygon();
     private Circle circle = new Circle();
 
+    private String name = "Jan-Luca";
     boolean isMe;
 
-    public ChatBubble(ChatMessage message, boolean isMe) {
+    public ChatBubble(Message message, boolean isMe) {
         this.getStyleClass().add("chat-bubble");
         this.message = message;
-        this.isMe = isMe;
+        authorLabel.setText(message.getAuthor().getName());
+        messageContent.setText(message.getText());
+        this.isMe = message.getAuthor().getName().equals(name);
 
         initMessageTop();
         initMessageContent();
@@ -45,7 +49,7 @@ public class ChatBubble extends VBox {
         this.messageTopWrapper.getStyleClass().add("message-top");
         messageTopWrapper.setSpacing(6);
 
-        this.authorLabel.setText(message.getAuthor());
+        //this.authorLabel.setText(message.getAuthor().toString());
         this.authorLabel.getStyleClass().add("message-author");
         this.authorLabel.getStyleClass().add("text-black");
 
@@ -68,7 +72,7 @@ public class ChatBubble extends VBox {
         messageContentWrapper.getStyleClass().add("message-content-wrapper");
         messageContentWrapper.setPadding(new Insets(0,50,0,0));
 
-        this.messageContent.setText(message.getContent());
+        //this.messageContent.setText(message.getContent());
         this.messageContent.getStyleClass().add("message-content");
         this.messageContent.getStyleClass().add("text-white");
         this.messageContent.setWrapText(true);

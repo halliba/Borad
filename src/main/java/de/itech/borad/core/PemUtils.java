@@ -10,8 +10,9 @@ import java.io.StringWriter;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
-class PemUtils {
+public class PemUtils {
     public static PrivateKey getPrivateKeyFromPem(String pemContent) {
         try {
             StringReader reader = new StringReader(pemContent);
@@ -27,15 +28,17 @@ class PemUtils {
     }
 
     public static PublicKey getPublicKeyFromPem(String pemContent) {
+        System.out.println(pemContent);
         try {
-            StringReader reader = new StringReader(pemContent);
-            byte[] content = new PemReader(reader).readPemObject().getContent();
-            PKCS8EncodedKeySpec publicKeySpec = new PKCS8EncodedKeySpec(content);
-            return KeyFactory.getInstance("RSA", "BC").generatePublic(publicKeySpec);
+            StringReader reader = new StringReader(pemContent.replaceAll("\\\\r", "\r").replaceAll("\\\\n", "\n"));
+            PemReader pReader = new PemReader(reader);
+            PemObject pObj = pReader.readPemObject();
+            byte[] content = pObj.getContent();
+            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(content);
+            return KeyFactory.getInstance("RSA").generatePublic(publicKeySpec);
         } catch (NoSuchAlgorithmException
                 | IOException
-                | InvalidKeySpecException
-                | NoSuchProviderException e) {
+                | InvalidKeySpecException e) {
             return null;
         }
     }
@@ -47,6 +50,7 @@ class PemUtils {
         PemWriter pemWriter = new PemWriter(writer);
         try {
             pemWriter.writeObject(pemObject);
+            pemWriter.flush();
         } catch (IOException e) {
             return null;
         }

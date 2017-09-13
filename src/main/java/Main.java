@@ -1,10 +1,13 @@
+import com.fasterxml.jackson.databind.JsonNode;
 import de.itech.borad.client.Gui;
-import de.itech.borad.client.chatlist.PublicChatRoom;
+import de.itech.borad.core.MessageBuilder;
 import de.itech.borad.core.MessageController;
 import de.itech.borad.network.UdpManager;
-import de.itech.borad.network.UdpServer;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import java.security.Security;
 
 
 public class Main  extends Application {
@@ -17,14 +20,19 @@ public class Main  extends Application {
         controller.setManager(man);
         man.setMessageController(controller);
         man.startListening();
-        man.sendMessage("FLEX{}");
+        MessageBuilder builder = new MessageBuilder();
+        //builder.buildMessage("test", new byte[2]);
+        JsonNode keepAlive = builder.buildKeepAlive();
+
+        man.sendMessage(keepAlive.toString());
+
     }
 
     static UdpManager man;
 
     public static void main(String[] args) {
         man = new UdpManager();
-        PublicChatRoom publicChatRoom = new PublicChatRoom("Public","Public");
+        Security.addProvider(new BouncyCastleProvider());
         launch(args);
     }
 }

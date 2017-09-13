@@ -1,7 +1,7 @@
 package de.itech.borad.client;
 import de.itech.borad.core.MessageController;
-import de.itech.borad.models.ChatMessage;
-import de.itech.borad.network.UdpManager;
+import de.itech.borad.models.BaseMessage;
+import de.itech.borad.models.Message;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
@@ -46,7 +46,7 @@ public class Gui {
         window.show();
     }
 
-    public void addMessage(ChatMessage msg){
+    public void addMessage(Message msg){
         Platform.runLater(() -> rightSide.addMessage(msg));
     }
 }

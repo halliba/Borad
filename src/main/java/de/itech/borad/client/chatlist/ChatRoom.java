@@ -1,10 +1,15 @@
 package de.itech.borad.client.chatlist;
 
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.StringProperty;
+import de.itech.borad.core.HashUtils;
 
+public class ChatRoom {
 
-public interface ChatRoom {
-    LongProperty timestampProperty();
-    StringProperty nameProperty();
+    private String name;
+    private String passwordHash;
+
+    public ChatRoom(String name, String passwordHash){
+        this.name = name;
+        this.passwordHash = passwordHash;
+    }
+
 }

@@ -1,6 +1,7 @@
 package de.itech.borad.client.chat;
 
-import de.itech.borad.models.ChatMessage;
+import de.itech.borad.models.BaseMessage;
+import de.itech.borad.models.Message;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
@@ -21,7 +22,7 @@ public class ChatPanel extends ScrollPane {
      * children of this panel.
      * @param message The message to add to this panel.
      */
-    public synchronized void addMessage(ChatMessage message) {
+    public synchronized void addMessage(Message message) {
         if (message == null) throw new NullPointerException("The message to add to the panel can not be null");
 
         final ChatBubble bubble = new ChatBubble(message, false);

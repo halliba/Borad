@@ -2,8 +2,6 @@ package de.itech.borad.client.chat;
 
 
 import de.itech.borad.core.MessageController;
-import de.itech.borad.models.ChatMessage;
-import de.itech.borad.network.UdpManager;
 import javafx.scene.control.TextField;
 
 public class ChatInput extends TextField {
@@ -19,7 +17,6 @@ public class ChatInput extends TextField {
             System.out.println(e);
             ChatInput input = ((ChatInput) e.getTarget());
             String message = input.getText();
-            chatPanel.addMessage(new ChatMessage("Sergej", message));
             controller.sendMessage(message);
             input.setText("");
         });

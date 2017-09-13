@@ -2,9 +2,9 @@ package de.itech.borad.client;
 
 import de.itech.borad.client.chat.ChatInput;
 import de.itech.borad.core.MessageController;
-import de.itech.borad.models.ChatMessage;
+import de.itech.borad.models.BaseMessage;
 import de.itech.borad.client.chat.ChatPanel;
-import de.itech.borad.network.UdpManager;
+import de.itech.borad.models.Message;
 import javafx.geometry.Insets;
 import javafx.scene.layout.*;
 
@@ -18,11 +18,7 @@ public class Right extends BorderPane {
         super();
 
         chatPanel = new ChatPanel();
-        for(int i = 0; i< 1; i++) {
-            chatPanel.addMessage(new ChatMessage("Sergej", "Are we meeting today? Project has been already finished and I have results to show you."));
-            chatPanel.addMessage(new ChatMessage("Anna", "Are we meeting today? Project has been already finished and I have results to show you."));
-            chatPanel.addMessage(new ChatMessage("Sergej", "Are we meeting today?"));
-        }
+
 
         ChatInput input = new ChatInput(chatPanel, controller);
 
@@ -34,7 +30,7 @@ public class Right extends BorderPane {
         this.setBottom(input);
     }
 
-    public void addMessage(ChatMessage msg){
+    public void addMessage(Message msg){
         chatPanel.addMessage(msg);
     }
 
