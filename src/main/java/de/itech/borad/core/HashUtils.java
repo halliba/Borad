@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class HashUtils {
-    public static String hashSHA256(String input){
+    public static byte[] hashSHA256(String input){
         MessageDigest digest = null;
         try {
             digest = MessageDigest.getInstance("SHA-256");
@@ -15,8 +15,6 @@ public class HashUtils {
             return null;
         }
         byte[] hash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
-
-        String encoded = Base64.getEncoder().encodeToString(hash);
-        return encoded;
+        return hash;
     }
 }

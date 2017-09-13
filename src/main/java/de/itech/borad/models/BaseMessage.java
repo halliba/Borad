@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.itech.borad.core.PemUtils;
 import de.itech.borad.core.SignUtils;
+import de.itech.borad.core.StateManager;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -13,7 +14,7 @@ import java.util.Date;
 public class BaseMessage {
 
     private Date timestamp = new Date();
-    private Author author;
+    private User user;
     private boolean isVerified;
     private JsonNode dataJson;
 
@@ -25,12 +26,12 @@ public class BaseMessage {
         return timestamp;
     }
 
-    public Author getAuthor() {
-        return author;
+    public User getUser() {
+        return user;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public static KeepAlive parseKeepAlive(JsonNode json){
@@ -53,6 +54,7 @@ public class BaseMessage {
 
     public void parseMessage(JsonNode json){
         try{
+            StateManager stateManager = StateManager.getStateManager();
             String rawContent = getTrimmedStringFromJson(json, "content");
             String content = getBase64AsUTF8(rawContent);
             JsonNode contentJson = getStringAsJson(content);
@@ -67,11 +69,15 @@ public class BaseMessage {
             if(!dataJson.has("sender")){
                 return;
             }
+            if(dataJson.has("content")){
+                ((Message) this).setText(getTrimmedStringFromJson(dataJson, "content"));
+            }
             JsonNode senderJson = getStringAsJson(dataJson.get("sender").toString());
             String name = getTrimmedStringFromJson(senderJson, "name");
             String publicKey = getTrimmedStringFromJson(senderJson, "publicKey");
-
-            setAuthor(new Author(name, PemUtils.getPublicKeyFromPem(publicKey.trim())));
+            User user = stateManager.getUser(name, publicKey);
+            user.receivedMessage();
+            setUser(user);
             verify(base64Data, signature);
         } catch (NullPointerException ignored){}
     }
@@ -99,7 +105,7 @@ public class BaseMessage {
 
     void verify(String data, String signature){
         try {
-            isVerified = SignUtils.verify(data.getBytes("UTF-8"), Base64.getDecoder().decode(signature), author.getPublicKey());
+            isVerified = SignUtils.verify(data.getBytes("UTF-8"), Base64.getDecoder().decode(signature), user.getPublicKey());
         } catch (UnsupportedEncodingException e) {
             isVerified = false;
         }

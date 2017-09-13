@@ -18,9 +18,11 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.*;
 
-class CryptUtils {
+public class CryptUtils {
     public static byte[] genrateAesKey() {
         SecureRandom random = new SecureRandom();
         byte[] keyBytes = new byte[32];
@@ -98,7 +100,13 @@ class CryptUtils {
      */
     public static byte[] aesDecryptByteArray(byte[] encrypted, byte[] key) {
         byte[] iv = new byte[16]; //initial vector is 16 bytes
+        for(int i = 0; i < 16; i++){
+            iv[i] = encrypted[i];
+        }
         byte[] encryptedContent = new byte[encrypted.length - 16];
+        for(int i = 16; i < encrypted.length; i++){
+            encryptedContent[i-16] = encrypted[i];
+        }
 
         KeyParameter keyParam = new KeyParameter(key);
         CipherParameters params = new ParametersWithIV(keyParam, iv);

@@ -1,6 +1,5 @@
 package de.itech.borad.client.chat;
 
-import de.itech.borad.models.BaseMessage;
 import de.itech.borad.models.Message;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,9 +27,9 @@ public class ChatBubble extends VBox {
     public ChatBubble(Message message, boolean isMe) {
         this.getStyleClass().add("chat-bubble");
         this.message = message;
-        authorLabel.setText(message.getAuthor().getName());
+        authorLabel.setText(message.getUser().getName());
         messageContent.setText(message.getText());
-        this.isMe = message.getAuthor().getName().equals(name);
+        this.isMe = message.getUser().getName().equals(name);
 
         initMessageTop();
         initMessageContent();
@@ -49,7 +48,7 @@ public class ChatBubble extends VBox {
         this.messageTopWrapper.getStyleClass().add("message-top");
         messageTopWrapper.setSpacing(6);
 
-        //this.authorLabel.setText(message.getAuthor().toString());
+        //this.authorLabel.setText(message.getUser().toString());
         this.authorLabel.getStyleClass().add("message-author");
         this.authorLabel.getStyleClass().add("text-black");
 

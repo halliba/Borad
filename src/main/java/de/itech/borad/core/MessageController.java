@@ -45,7 +45,7 @@ public class MessageController {
                     KeepAlive keepAlive = BaseMessage.parseKeepAlive(json);
                     //notify keepAlive Manager (better name)
                     break;
-                case "PublicMessage":
+                case "Message":
                     Message message = BaseMessage.parseTextMessage(json);
                     gui.addMessage(message);
                     //notify gui
