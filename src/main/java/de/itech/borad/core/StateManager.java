@@ -89,6 +89,13 @@ public class StateManager {
     }
 
     public void handleKeepAlive(KeepAlive keepAlive){
-        users.get(keepAlive.getUser().getPublicKey()).receivedMessage();
+        User user = users.get(keepAlive.getUser().getPublicKey());
+        if(user == null){
+            User keepAliveUser = keepAlive.getUser();
+            keepAliveUser.receivedMessage();
+            users.put(keepAliveUser.getPublicKey(), keepAliveUser);
+        } else {
+            user.receivedMessage();
+        }
     }
 }
