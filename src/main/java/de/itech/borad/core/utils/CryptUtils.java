@@ -1,4 +1,4 @@
-package de.itech.borad.core;
+package de.itech.borad.core.utils;
 
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
@@ -75,9 +75,14 @@ public class CryptUtils {
     public static byte[] aesEncryptByteArray(byte[] secret, byte[] key) {
         KeyParameter keyParameter = new KeyParameter(key);
 
-        BlockCipher AESCipher = new AESEngine();
-        PaddedBufferedBlockCipher pbbc = new PaddedBufferedBlockCipher(AESCipher, new PKCS7Padding());
-        pbbc.init(true, keyParameter);
+        byte[] iv = new byte[16];
+        SecureRandom random = new SecureRandom();
+        random.nextBytes(iv);
+
+        CipherParameters params = new ParametersWithIV(keyParameter, iv);
+
+        PaddedBufferedBlockCipher pbbc = new PaddedBufferedBlockCipher(new CBCBlockCipher(new AESEngine()), new PKCS7Padding());
+        pbbc.init(true, params);
 
         byte[] output = new byte[pbbc.getOutputSize(secret.length)];
         int bytesWrittenOut = pbbc.processBytes(
@@ -88,8 +93,10 @@ public class CryptUtils {
         } catch (InvalidCipherTextException e) {
             return null;
         }
-
-        return output;
+        byte[] result = new byte[output.length + iv.length];
+        System.arraycopy(iv, 0, result, 0, iv.length);
+        System.arraycopy(output, 0, result, iv.length, output.length);
+        return result;
     }
 
     /**

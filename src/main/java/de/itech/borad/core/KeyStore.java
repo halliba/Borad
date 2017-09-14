@@ -1,10 +1,9 @@
 package de.itech.borad.core;
 
+import de.itech.borad.core.utils.PemUtils;
+
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.file.DirectoryIteratorException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.*;
 import java.security.interfaces.RSAPrivateCrtKey;
@@ -20,7 +19,17 @@ public class KeyStore {
     private PublicKey publicKey;
     private KeyFactory keyFactory;
 
-    public KeyStore() {
+    private static KeyStore keyStore;
+
+    public static KeyStore getInstance(){
+        if(keyStore == null){
+            keyStore = new KeyStore();
+            return keyStore;
+        }
+        return keyStore;
+    }
+
+    private KeyStore() {
         File file = new File(FILE_PATH_NAME);
         if(file.exists()){
             try {
@@ -73,6 +82,10 @@ public class KeyStore {
 
     public PrivateKey getPrivateKey() {
         return privateKey;
+    }
+
+    public PublicKey getPublicKey() {
+        return publicKey;
     }
 
     public String getPublicKeyPem(){

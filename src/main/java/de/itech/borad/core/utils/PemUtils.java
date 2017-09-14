@@ -1,4 +1,4 @@
-package de.itech.borad.core;
+package de.itech.borad.core.utils;
 
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;

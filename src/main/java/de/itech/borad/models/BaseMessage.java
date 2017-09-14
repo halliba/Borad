@@ -2,21 +2,22 @@ package de.itech.borad.models;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.itech.borad.core.PemUtils;
-import de.itech.borad.core.SignUtils;
+import de.itech.borad.core.utils.SignUtils;
 import de.itech.borad.core.StateManager;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.Date;
+import java.util.UUID;
 
 public class BaseMessage {
 
-    private Date timestamp = new Date();
+    private Date timestamp;
     private User user;
     private boolean isVerified;
     private JsonNode dataJson;
+    private UUID id;
 
     public boolean isVerified() {
         return isVerified;
@@ -55,10 +56,14 @@ public class BaseMessage {
     public void parseMessage(JsonNode json){
         try{
             StateManager stateManager = StateManager.getStateManager();
+            if(!json.has("id")){
+                return;
+            }
+            id = UUID.fromString(getTrimmedStringFromJson(json, "id"));
             String rawContent = getTrimmedStringFromJson(json, "content");
             String content = getBase64AsUTF8(rawContent);
             JsonNode contentJson = getStringAsJson(content);
-            if(!contentJson.has("data")){
+            if(!contentJson.has("data") ){
                 return;
             }
             String base64Data = getTrimmedStringFromJson(contentJson, "data");
@@ -66,12 +71,14 @@ public class BaseMessage {
             JsonNode dataJson = getStringAsJson(data);
             this.dataJson = dataJson;
             String signature = getTrimmedStringFromJson(contentJson, "signature");
-            if(!dataJson.has("sender")){
+            if(!(dataJson.has("sender") && dataJson.has("timeStamp"))){
                 return;
             }
             if(dataJson.has("content")){
                 ((Message) this).setText(getTrimmedStringFromJson(dataJson, "content"));
             }
+            long unixTimeStamp = Long.valueOf(getTrimmedStringFromJson(dataJson, "timeStamp")) * 1000;
+            timestamp = new Date(unixTimeStamp);
             JsonNode senderJson = getStringAsJson(dataJson.get("sender").toString());
             String name = getTrimmedStringFromJson(senderJson, "name");
             String publicKey = getTrimmedStringFromJson(senderJson, "publicKey");
@@ -113,5 +120,9 @@ public class BaseMessage {
 
     public JsonNode getDataJson() {
         return dataJson;
+    }
+
+    public UUID getId() {
+        return id;
     }
 }

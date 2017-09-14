@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.databind.JsonNode;
 import de.itech.borad.client.Gui;
+import de.itech.borad.core.KeepAliveManager;
 import de.itech.borad.core.MessageBuilder;
 import de.itech.borad.core.MessageController;
 import de.itech.borad.core.StateManager;
@@ -21,15 +22,7 @@ public class Main  extends Application {
         controller.setManager(man);
         man.setMessageController(controller);
         man.startListening();
-        MessageBuilder builder = new MessageBuilder();
-
-        controller.handleBaseMessage(man.getTestMessage());
-
-        //builder.buildMessage("test", new byte[2]);
-        JsonNode keepAlive = builder.buildKeepAlive();
-
-        man.sendMessage(keepAlive.toString());
-
+        KeepAliveManager keepAliveManager = new KeepAliveManager(controller);
     }
 
     static UdpManager man;

@@ -1,4 +1,4 @@
-package de.itech.borad.core;
+package de.itech.borad.core.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

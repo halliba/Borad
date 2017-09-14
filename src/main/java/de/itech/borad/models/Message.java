@@ -1,13 +1,11 @@
 package de.itech.borad.models;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.itech.borad.client.chatlist.ChatRoom;
-import de.itech.borad.core.CryptUtils;
+import de.itech.borad.core.utils.CryptUtils;
 import de.itech.borad.core.StateManager;
 
-import java.io.IOException;
 import java.util.Base64;
 
 public class Message extends BaseMessage{

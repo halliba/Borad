@@ -1,10 +1,16 @@
 package de.itech.borad.client.chatlist;
 
-import de.itech.borad.core.CryptUtils;
-import de.itech.borad.core.HashUtils;
+import de.itech.borad.core.utils.CryptUtils;
+import de.itech.borad.core.utils.HashUtils;
+
+import java.io.UnsupportedEncodingException;
 
 
 public class ChatRoom {
+
+    public String getName() {
+        return name;
+    }
 
     private String name;
     private byte[] preSharedKey;
@@ -19,12 +25,20 @@ public class ChatRoom {
         this.preSharedKey = preSharedKey;
     }
 
-    public boolean isRoom(byte[] chatRoomName){
+    public boolean isRoom(byte[] chatRoomName) {
         byte[] encrypted = CryptUtils.aesDecryptByteArray(chatRoomName, this.preSharedKey);
-        return new String(encrypted).equals(name);
+        try {
+            return encrypted != null && new String(encrypted, "UTF-8").equals(name);
+        } catch (UnsupportedEncodingException e) {
+            return false;
+        }
     }
 
     public byte[] getPreSharedKey(){
         return preSharedKey;
+    }
+
+    public byte[] getChatRoomIdentifier() throws UnsupportedEncodingException {
+        return CryptUtils.aesEncryptByteArray(name.getBytes("UTF-8"), this.preSharedKey);
     }
 }

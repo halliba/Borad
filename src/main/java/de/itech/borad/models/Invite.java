@@ -11,13 +11,7 @@ public class Invite extends BaseMessage {
 
     @Override
     public void parseMessage(JsonNode json){
-        super.parseMessage(json);
-        JsonNode data = getDataJson();
-        if(!data.has("name") || !data.has("preSharedKey")){
-            return;
-        }
-        roomName = getTrimmedStringFromJson(data, "name");
-        preSharedKey = Base64.getDecoder().decode(getTrimmedStringFromJson(data, "preSharedKey"));
+
     }
 
     public byte[] getPreSharedKey() {
