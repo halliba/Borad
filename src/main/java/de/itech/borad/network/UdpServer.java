@@ -28,7 +28,6 @@ public class UdpServer implements Runnable{
     public void run() {
         while(true){
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-            System.out.println("trying to receive Data!");
             try {
                 serverSocket.receive(receivePacket);
             } catch (IOException e) {

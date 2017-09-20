@@ -1,5 +1,7 @@
 package de.itech.borad.core;
 
+import de.itech.borad.models.Message;
+
 public class KeepAliveManager {
 
     private boolean isActive;
@@ -14,15 +16,19 @@ public class KeepAliveManager {
 
                 if(isActive){
                     controller.sendKeepAlive();
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                }
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
         t.start();
+    }
+
+    public void setActive(boolean isActive){
+        this.isActive = isActive;
     }
 
 

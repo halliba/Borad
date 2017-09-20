@@ -1,5 +1,6 @@
 package de.itech.borad.client.chat;
 
+import de.itech.borad.core.StateManager;
 import de.itech.borad.models.Message;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,7 +22,6 @@ public class ChatBubble extends VBox {
     private Polygon triangle = new Polygon();
     private Circle circle = new Circle();
 
-    private String name = "Jan-Luca";
     boolean isMe;
 
     public ChatBubble(Message message, boolean isMe) {
@@ -29,7 +29,7 @@ public class ChatBubble extends VBox {
         this.message = message;
         authorLabel.setText(message.getUser().getName());
         messageContent.setText(message.getText());
-        this.isMe = message.getUser().getName().equals(name);
+        this.isMe = message.getUser().getName().equals(StateManager.getStateManager().getOwnName());
 
         initMessageTop();
         initMessageContent();
@@ -75,6 +75,7 @@ public class ChatBubble extends VBox {
         this.messageContent.getStyleClass().add("message-content");
         this.messageContent.getStyleClass().add("text-white");
         this.messageContent.setWrapText(true);
+
 
         triangle.getPoints().setAll(
                 10d, 0d,

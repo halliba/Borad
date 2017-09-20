@@ -30,12 +30,22 @@ public class StateManager {
 
     private KeyStore keyStore;
 
+    private KeepAliveManager keepAliveManager;
+
     public static StateManager getStateManager(){
         if(stateManager == null){
             stateManager = new StateManager();
             return stateManager;
         }
         return stateManager;
+    }
+
+    public void setKeepAliveManager(KeepAliveManager keepAliveManager){
+        this.keepAliveManager = keepAliveManager;
+    }
+
+    public void setKeepAliveActive(boolean active){
+        keepAliveManager.setActive(active);
     }
 
     public ChatRoom getSelectedChatRoom(){
@@ -97,5 +107,22 @@ public class StateManager {
         } else {
             user.receivedMessage();
         }
+    }
+
+    public String getOwnName(){
+        return me.getName();
+    }
+
+    public void addChatRoom(ChatRoom room){
+        chatRooms.add(room);
+    }
+
+    public boolean chatRoomExists(String name){
+        for(ChatRoom room: chatRooms){
+            if(room.getName().equals(name)){
+                return true;
+            }
+        }
+        return false;
     }
 }

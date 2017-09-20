@@ -6,12 +6,14 @@ import de.itech.borad.client.chatlist.ChatRoom;
 import de.itech.borad.core.utils.CryptUtils;
 import de.itech.borad.core.StateManager;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
 public class Message extends BaseMessage{
 
     private String text;
     private byte[] chatRoomName;
+    private String clearTextRoomName;
 
     @Override
     public void parseMessage(JsonNode json){
@@ -22,6 +24,7 @@ public class Message extends BaseMessage{
         StateManager stateManager = StateManager.getStateManager();
         ChatRoom room = stateManager.findChatRoom(chatRoomName);
         if(room != null){
+            clearTextRoomName = room.getName();
             byte[] contentBytes = Base64.getDecoder().decode(getTrimmedStringFromJson(json, "content"));
             byte[] decryptedContent = CryptUtils.aesDecryptByteArray(contentBytes, room.getPreSharedKey());
             String content = new String(decryptedContent);
@@ -42,11 +45,15 @@ public class Message extends BaseMessage{
         return chatRoomName;
     }
 
+    public String getClearTextRoomName(){
+        return clearTextRoomName;
+    }
+
     public String getText() {
         return text;
     }
 
-    void setText(String text){
+    public void setText(String text){
         this.text = text;
     }
 }

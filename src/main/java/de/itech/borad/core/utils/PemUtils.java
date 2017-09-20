@@ -28,7 +28,6 @@ public class PemUtils {
     }
 
     public static PublicKey getPublicKeyFromPem(String pemContent) {
-        System.out.println(pemContent);
         try {
             StringReader reader = new StringReader(pemContent.replaceAll("\\\\r", "\r").replaceAll("\\\\n", "\n"));
             PemReader pReader = new PemReader(reader);

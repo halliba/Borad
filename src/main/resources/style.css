@@ -53,6 +53,7 @@
 
 .message-content{
     -fx-padding: 10;
+    -fx-min-width: 50;
 }
 
 .message-time{

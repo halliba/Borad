@@ -1,12 +1,14 @@
 package de.itech.borad.client;
 import de.itech.borad.core.MessageController;
-import de.itech.borad.models.BaseMessage;
 import de.itech.borad.models.Message;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,26 +18,30 @@ public class Gui {
     private Stage window;
     private Scene scene;
 
-    private static int MIN_WIDTH = 800;
-    private static int MIN_HEIGHT = 600;
+    private static final int MIN_WIDTH = 800;
+    private static final int MIN_HEIGHT = 600;
 
     private Right rightSide;
+
+    private Left leftSide;
+
+    private VBox chatList, userList;
+
+    private Button selectedButton;
 
     public Gui(Stage window, MessageController controller) throws IOException {
         //initialise GUI
         this.window = window;
 
-        VBox left = new VBox();
-        left.setStyle("-fx-background-color: #444753; -fx-text-fill: white;");
-        left.setMinWidth(260);
-        left.setMaxWidth(260);
-
-
         rightSide = new Right(controller);
 
+        leftSide = new Left(controller);
+
+        leftSide.setRightSide(rightSide);
+
         HBox.setHgrow(rightSide, Priority.ALWAYS);
-        HBox.setHgrow(left, Priority.ALWAYS);
-        HBox hBox = new HBox(left,rightSide);
+        HBox.setHgrow(leftSide, Priority.ALWAYS);
+        HBox hBox = new HBox(leftSide,rightSide);
 
         this.scene = new Scene(hBox, MIN_WIDTH, MIN_HEIGHT);
         this.scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
@@ -49,4 +55,8 @@ public class Gui {
     public void addMessage(Message msg){
         Platform.runLater(() -> rightSide.addMessage(msg));
     }
+
+
+
+
 }

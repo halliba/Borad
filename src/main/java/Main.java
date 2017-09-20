@@ -6,6 +6,7 @@ import de.itech.borad.core.MessageController;
 import de.itech.borad.core.StateManager;
 import de.itech.borad.network.UdpManager;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -16,6 +17,8 @@ public class Main  extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        UdpManager man = new UdpManager();
+        primaryStage.setOnCloseRequest(e -> System.exit(0));
         MessageController controller = new MessageController();
         Gui gui = new Gui(primaryStage, controller);
         controller.setGui(gui);
@@ -23,12 +26,12 @@ public class Main  extends Application {
         man.setMessageController(controller);
         man.startListening();
         KeepAliveManager keepAliveManager = new KeepAliveManager(controller);
+        StateManager.getStateManager().setKeepAliveManager(keepAliveManager);
     }
 
-    static UdpManager man;
+
 
     public static void main(String[] args) {
-        man = new UdpManager();
         Security.addProvider(new BouncyCastleProvider());
         launch(args);
     }

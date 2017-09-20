@@ -125,4 +125,8 @@ public class BaseMessage {
     public UUID getId() {
         return id;
     }
+
+    public void setTimestamp(Date date){
+        this.timestamp = date;
+    }
 }

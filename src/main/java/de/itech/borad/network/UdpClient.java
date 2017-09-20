@@ -57,8 +57,6 @@ public class UdpClient implements Runnable{
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                System.out.println(getClass().getName() + ">>> Request packet sent to: " + broadcast.getHostAddress() + "; Interface: " + networkInterface.getDisplayName());
             }
         }
     }
