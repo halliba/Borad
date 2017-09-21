@@ -9,6 +9,7 @@ import de.itech.borad.models.User;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
+import javax.swing.*;
 import java.security.Key;
 import java.util.Date;
 
@@ -43,6 +44,7 @@ public class ChatPanel extends ScrollPane {
 
         this.messages.getChildren().add(bubble);
 
+        this.setVvalue(1.0);
         this.messages.layout();
     }
 
@@ -56,9 +58,9 @@ public class ChatPanel extends ScrollPane {
         bubble.prefWidthProperty().bind(this.widthProperty().subtract(11));
 
         this.messages.getChildren().add(bubble);
+        this.setVvalue(1.0);
 
         this.messages.layout();
-
     }
 
     public ChatInput getChatInput() {

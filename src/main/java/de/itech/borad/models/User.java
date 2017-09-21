@@ -5,6 +5,8 @@ import java.util.Date;
 
 public class User {
 
+    private static final int ONLINE_TIMEOUT = 10;
+
     private String name;
     private PublicKey publicKey;
     private Date lastMessageReceived;
@@ -28,5 +30,10 @@ public class User {
 
     public boolean isSameUser(User user){
         return this.publicKey.equals(user.publicKey);
+    }
+
+    public boolean isOnline(){
+        long timeSinceMessage = new Date().getTime() - lastMessageReceived.getTime();
+        return timeSinceMessage < ONLINE_TIMEOUT * 1000;
     }
 }

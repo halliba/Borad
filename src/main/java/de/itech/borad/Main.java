@@ -1,3 +1,5 @@
+package de.itech.borad;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import de.itech.borad.client.Gui;
 import de.itech.borad.core.KeepAliveManager;
@@ -26,7 +28,10 @@ public class Main  extends Application {
         man.setMessageController(controller);
         man.startListening();
         KeepAliveManager keepAliveManager = new KeepAliveManager(controller);
-        StateManager.getStateManager().setKeepAliveManager(keepAliveManager);
+        StateManager stateManager= StateManager.getStateManager();
+        stateManager.setKeepAliveManager(keepAliveManager);
+        stateManager.setGui(gui);
+
     }
 
 

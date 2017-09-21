@@ -1,6 +1,7 @@
 package de.itech.borad.client;
 import de.itech.borad.core.MessageController;
 import de.itech.borad.models.Message;
+import de.itech.borad.models.User;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,6 +23,10 @@ public class Gui {
     private static final int MIN_HEIGHT = 600;
 
     private Right rightSide;
+
+    public Left getLeftSide() {
+        return leftSide;
+    }
 
     private Left leftSide;
 
@@ -56,7 +61,9 @@ public class Gui {
         Platform.runLater(() -> rightSide.addMessage(msg));
     }
 
-
+    public void doUserUpdate(User user, boolean isOnline){
+        Platform.runLater(() -> leftSide.setIsUserOnline(user, isOnline));
+    }
 
 
 }

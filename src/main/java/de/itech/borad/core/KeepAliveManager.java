@@ -8,8 +8,11 @@ public class KeepAliveManager {
 
     private MessageController controller;
 
+    private StateManager stateManager;
+
     public KeepAliveManager(MessageController controller){
         this.controller = controller;
+        stateManager = StateManager.getStateManager();
         isActive = true;
         Thread t = new Thread(() -> {
             while(true){
@@ -17,6 +20,7 @@ public class KeepAliveManager {
                 if(isActive){
                     controller.sendKeepAlive();
                 }
+                stateManager.doUserUpdate();
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {

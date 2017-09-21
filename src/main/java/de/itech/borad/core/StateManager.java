@@ -1,5 +1,6 @@
 package de.itech.borad.core;
 
+import de.itech.borad.client.Gui;
 import de.itech.borad.client.chatlist.ChatRoom;
 import de.itech.borad.core.utils.PemUtils;
 import de.itech.borad.models.KeepAlive;
@@ -32,6 +33,8 @@ public class StateManager {
 
     private KeepAliveManager keepAliveManager;
 
+    private Gui gui;
+
     public static StateManager getStateManager(){
         if(stateManager == null){
             stateManager = new StateManager();
@@ -46,6 +49,10 @@ public class StateManager {
 
     public void setKeepAliveActive(boolean active){
         keepAliveManager.setActive(active);
+    }
+
+    public void setGui(Gui gui){
+        this.gui = gui;
     }
 
     public ChatRoom getSelectedChatRoom(){
@@ -107,6 +114,12 @@ public class StateManager {
         } else {
             user.receivedMessage();
         }
+    }
+
+    public void doUserUpdate(){
+        users.forEach((key, user) -> {
+            gui.doUserUpdate(user, user.isOnline());
+        });
     }
 
     public String getOwnName(){

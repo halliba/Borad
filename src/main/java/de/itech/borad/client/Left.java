@@ -1,20 +1,22 @@
 package de.itech.borad.client;
 
 import de.itech.borad.client.chatlist.ChatRoom;
-import de.itech.borad.core.KeepAliveManager;
 import de.itech.borad.core.MessageController;
 import de.itech.borad.core.StateManager;
-import de.itech.borad.models.KeepAlive;
+import de.itech.borad.models.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.TextAlignment;
+
+import java.util.HashMap;
 
 public class Left extends BorderPane {
 
@@ -27,6 +29,9 @@ public class Left extends BorderPane {
 
     private static final int LEFT_WIDTH = 260;
 
+    private static final int USER_LIST_ELEMENT_HEIGHT = 35;
+    private static final int BOX_SPACING = 5;
+
     private Right rightSide;
 
     private VBox chatList, userList;
@@ -35,13 +40,19 @@ public class Left extends BorderPane {
 
     private StateManager stateManager = StateManager.getStateManager();
 
+    private HashMap<User, Circle> userStatus;
+
     public Left(MessageController controller){
+
         this.controller = controller;
+
+        userStatus = new HashMap<>();
 
         HBox buttons = new HBox();
         VBox controls = new VBox();
         chatList = new VBox();
         userList = new VBox();
+
 
         this.setStyle("-fx-background-color: #444753; -fx-text-fill: white;");
         buttons.setStyle("-fx-background-color: #444753; -fx-text-fill: white;");
@@ -53,15 +64,14 @@ public class Left extends BorderPane {
         this.setMaxWidth(LEFT_WIDTH);
 
         buttons.setAlignment(Pos.CENTER);
-        buttons.setSpacing(5);
+        buttons.setSpacing(BOX_SPACING);
 
         this.setTop(buttons);
         this.setCenter(chatList);
         this.setBottom(controls);
 
         HBox newChatRoomControls = new HBox();
-        newChatRoomControls.setPadding(new Insets(5));
-        newChatRoomControls.setSpacing(5);
+        newChatRoomControls.setSpacing(BOX_SPACING);
         newChatRoomControls.setAlignment(Pos.CENTER);
         Button newChatRoom = new Button("+");
         TextField newName = new TextField();
@@ -95,14 +105,17 @@ public class Left extends BorderPane {
         });
 
 
-        controls.setPadding(new Insets(5));
-        controls.setSpacing(5);
+        controls.setPadding(new Insets(BOX_SPACING));
+        controls.setSpacing(BOX_SPACING);
         controls.getChildren().addAll(newChatRoomControls, newRoomPassword, showOffline);
 
-        chatList.setSpacing(5);
-        chatList.setPadding(new Insets(5));
+        chatList.setSpacing(BOX_SPACING);
+        chatList.setPadding(new Insets(BOX_SPACING));
+        chatList.getChildren().add(createChatButton("Public"));
 
-        chatList.getChildren().addAll(createChatButton("Public"), createChatButton("chatPanel 2"));
+        userList.setSpacing(BOX_SPACING);
+        userList.setPadding(new Insets(BOX_SPACING));
+        userList.setAlignment(Pos.TOP_CENTER);
 
         Button selectRooms = new Button("Chatrooms");
         Button selectUsers = new Button("User");
@@ -119,6 +132,48 @@ public class Left extends BorderPane {
             }
         });
 
+    }
+
+    private void createUserPanel(User user){
+        if(!userStatus.containsKey(user)){
+            HBox userBox = new HBox();
+            Pane circlePane = new Pane();
+            Circle onlineCircle = new Circle();
+            onlineCircle.setFill(Color.web("#86BB71"));
+            onlineCircle.setRadius(4);
+            onlineCircle.setTranslateY(USER_LIST_ELEMENT_HEIGHT * 0.5);
+            onlineCircle.setTranslateX(USER_LIST_ELEMENT_HEIGHT * 0.5);
+            Label label = new Label(user.getName());
+            label.setMaxHeight(Double.MAX_VALUE);
+            label.setStyle(style);
+            circlePane.setMaxHeight(Double.MAX_VALUE);
+            circlePane.setMinHeight(USER_LIST_ELEMENT_HEIGHT);
+            circlePane.setMinWidth(USER_LIST_ELEMENT_HEIGHT);
+            circlePane.setMaxWidth(USER_LIST_ELEMENT_HEIGHT);
+            userBox.setStyle(style);
+            userBox.setBorder(new Border(new BorderStroke(null, null, new CornerRadii(3), null)));
+            userBox.setMinHeight(USER_LIST_ELEMENT_HEIGHT);
+            userBox.setMaxWidth(Double.MAX_VALUE);
+            VBox.getVgrow(userBox);
+            label.setTextAlignment(TextAlignment.CENTER);
+            circlePane.getChildren().add(onlineCircle);
+            userBox.getChildren().addAll(circlePane, label);
+            userList.getChildren().add(userBox);
+            userStatus.put(user, onlineCircle);
+        }
+    }
+
+    public void setIsUserOnline(User user, boolean isOnline){
+        Circle onlineCircle = userStatus.get(user);
+        if(onlineCircle !=  null ){
+            if(isOnline){
+                onlineCircle.setFill(Color.web("#86BB71"));
+            } else {
+                onlineCircle.setFill(Color.web("#d8721e"));
+            }
+        }else {
+            createUserPanel(user);
+        }
     }
 
     private Button createChatButton(String text){
@@ -155,7 +210,7 @@ public class Left extends BorderPane {
 
     private void setUpButtons(Button button, HBox box){
         //BorderPane.setMargin(button, new Insets(10, 5, 10, 5));
-        button.setPadding(new Insets(10, 5, 10, 10));
+        button.setPadding(new Insets(BOX_SPACING));
         button.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(button, Priority.ALWAYS);
         button.setStyle("-fx-background-color: #333642; -fx-text-fill: #bdbdbd; -fx-font-size: 15;");
